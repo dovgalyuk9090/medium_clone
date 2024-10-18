@@ -1,10 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import {
-  FormBuilder,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { authActions } from '../../../store/actions/auth.actions';
 import { RegisterRequestInterface } from '../../types/registerRequest.interface';
@@ -13,7 +9,6 @@ import {
   selectValidationErrors,
 } from '../../../store/reducers/auth.reducer';
 import { AsyncPipe, CommonModule } from '@angular/common';
-import { AuthService } from '../../../shared/services/auth.service';
 import { combineLatest } from 'rxjs';
 import { BackendErrorMessagesComponent } from '../../../shared/components/backend-error-messages/backend-error-messages.component';
 
@@ -38,15 +33,12 @@ export class RegisterComponent {
 
   data$ = combineLatest({
     isSubmitting: this.store.select(selectIsSubmitting),
-    backendErrors: this.store.select(
-      selectValidationErrors,
-    ),
+    backendErrors: this.store.select(selectValidationErrors),
   });
 
   constructor(
     private fb: FormBuilder,
     private store: Store,
-    private authService: AuthService,
   ) {}
 
   onSubmit() {
@@ -54,11 +46,6 @@ export class RegisterComponent {
     const request: RegisterRequestInterface = {
       user: this.form.getRawValue(),
     };
-    this.store.dispatch(
-      authActions.register({ payload: request }),
-    );
-    this.authService
-      .register(request)
-      .subscribe((data) => console.log(data));
+    this.store.dispatch(authActions.register({ payload: request }));
   }
 }

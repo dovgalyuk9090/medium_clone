@@ -60,7 +60,7 @@ export const loginEffects = createEffect(
     persistenceService = inject(PersistenceService),
   ) => {
     return actions$.pipe(
-      ofType(authActions.register),
+      ofType(authActions.login),
       switchMap(({ payload }) => {
         return authService.login(payload).pipe(
           map((currentUser: CurrentUserInterface) => {

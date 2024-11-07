@@ -1,6 +1,7 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
 import { AuthStateInterface } from '../../auth/types/authState.interface';
 import { authActions } from '../actions/auth.actions';
+import { routerNavigationAction } from '@ngrx/router-store';
 
 const initialState: AuthStateInterface = {
   isSubmitting: false,
@@ -20,15 +21,14 @@ const authFeature = createFeature({
     })),
     on(authActions.registerSuccess, (state, action) => ({
       ...state,
-      isSubmitting: false,
+      isSubmitting: true,
       currentUser: action.currentUser,
     })),
     on(authActions.registerFailure, (state, action) => ({
       ...state,
-      isSubmitting: true,
+      isSubmitting: false,
       validationErrors: action.errors,
     })),
-
     on(authActions.login, (state) => ({
       ...state,
       isSubmitting: true,
@@ -36,13 +36,17 @@ const authFeature = createFeature({
     })),
     on(authActions.loginSuccess, (state, action) => ({
       ...state,
-      isSubmitting: false,
+      isSubmitting: true,
       currentUser: action.currentUser,
     })),
     on(authActions.loginFailure, (state, action) => ({
       ...state,
-      isSubmitting: true,
+      isSubmitting: false,
       validationErrors: action.errors,
+    })),
+    on(routerNavigationAction, (state) => ({
+      ...state,
+      validationErrors: null,
     })),
   ),
 });
